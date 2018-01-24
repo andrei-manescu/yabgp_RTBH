@@ -1,0 +1,24 @@
+# Below "set" commands are for Junos SRX (screen IP-Spoofing is specific to SRX). 
+# For routing Junos (MX/PTX/QFX,EX), interface level uRPF check can be used.
+set routing-options static route 192.0.2.101/32 reject
+set routing-options static route 192.0.2.101/32 retain
+set routing-options static route 192.0.2.101/32 no-readvertise
+
+set protocols bgp group rtbh-ebgp multihop ttl 2
+set protocols bgp group rtbh-ebgp local-address 172.16.2.2
+set protocols bgp group rtbh-ebgp connect-retry-interval 1
+set protocols bgp group rtbh-ebgp passive
+set protocols bgp group rtbh-ebgp advertise-inactive
+set protocols bgp group rtbh-ebgp import EMPTY-POLICY
+set protocols bgp group rtbh-ebgp family inet unicast prefix-limit maximum 4080
+set protocols bgp group rtbh-ebgp family inet unicast prefix-limit teardown
+set protocols bgp group rtbh-ebgp family inet flow no-validate ebgp-flowspec-novalidate
+set protocols bgp group rtbh-ebgp export EMPTY-POLICY
+set protocols bgp group rtbh-ebgp peer-as 65531
+set protocols bgp group rtbh-ebgp tcp-mss 1460
+set protocols bgp group rtbh-ebgp neighbor 172.16.2.13
+set protocols bgp group rtbh-ebgp neighbor 172.16.2.12
+
+set security screen ids-option INTERNET-SCREEN ip spoofing
+
+set security zones security-zone INTERNET screen INTERNET-SCREEN
